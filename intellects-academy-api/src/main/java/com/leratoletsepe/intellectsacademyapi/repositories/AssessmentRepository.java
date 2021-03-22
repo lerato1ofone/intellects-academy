@@ -25,6 +25,9 @@ public class AssessmentRepository implements IAssessmentRepository {
     private static final String SQL_FIND_BY_ID = "SELECT ASSESSMENT_ID, TITLE, ASSESSMENT_DATE, COURSE_ID " +
             "FROM IA_ASSESSMENTS WHERE ASSESSMENT_ID = ?";
 
+    private static final String SQL_UPDATE = "UPDATE IA_ASSESSMENTS SET TITLE = ?, ASSESSMENT_DATE = ?, COURSE_ID = ? " +
+            "WHERE ASSESSMENT_ID = ?";
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -57,7 +60,12 @@ public class AssessmentRepository implements IAssessmentRepository {
 
     @Override
     public Assessment update(Integer assessmentId, String title, LocalDate date, Integer courseId) throws IaBadRequestException {
-        return null;
+        try {
+            jdbcTemplate.update(SQL_UPDATE, new Object[]{title, date, courseId, assessmentId});
+            return this.findById(assessmentId);
+        } catch (Exception e) {
+            throw new IaBadRequestException("Invalid request details. Failed to update assessment");
+        }
     }
 
     @Override
