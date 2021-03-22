@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -46,5 +47,15 @@ public class AssessmentController {
 
         Assessment assessment = assessmentService.updateAssessment(assessmentId, title, date, courseId);
         return new ResponseEntity<>(assessment, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{assessmentId}")
+    public ResponseEntity<Map<String, Boolean>> deleteAssessment(HttpServletRequest request,
+                                                             @PathVariable("assessmentId") Integer assessmentId){
+        assessmentService.deleteAssessment(assessmentId);
+
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 }
