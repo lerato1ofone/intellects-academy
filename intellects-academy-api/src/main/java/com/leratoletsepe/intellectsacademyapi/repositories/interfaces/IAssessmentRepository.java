@@ -10,4 +10,8 @@ public interface IAssessmentRepository {
     Integer create(String title, LocalDate date, Integer courseId) throws IaBadRequestException;
 
     Assessment findById(Integer assessmentId) throws IaNotFoundException;
+
+    Assessment update(Integer assessmentId, String title, LocalDate date,  Integer courseId) throws IaBadRequestException;
+
+    void removeById(Integer assessmentId) throws IaBadRequestException;
 }
