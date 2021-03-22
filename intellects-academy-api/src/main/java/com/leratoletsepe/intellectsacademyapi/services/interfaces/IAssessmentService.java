@@ -10,4 +10,8 @@ public interface IAssessmentService {
     Assessment addAssessment(String title, LocalDate date, Integer courseId) throws IaBadRequestException;
 
     Assessment getAssessment(Integer assessmentId) throws IaNotFoundException;
+
+    Assessment updateAssessment(Integer assessmentId, String title, LocalDate date, Integer courseId) throws IaBadRequestException;
+
+    void deleteAssessment(Integer assessmentId) throws IaBadRequestException;
 }
