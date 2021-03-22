@@ -35,4 +35,16 @@ public class AssessmentController {
         Assessment assessment = assessmentService.getAssessment(assessmentId);
         return new ResponseEntity<>(assessment, HttpStatus.OK);
     }
+
+    @PutMapping("/{assessmentId}")
+    public ResponseEntity<Assessment> updateAssessment(HttpServletRequest request,
+                                                    @PathVariable("assessmentId") Integer assessmentId,
+                                                    @RequestBody Map<String, Object> assessmentMap) {
+        String title = (String) assessmentMap.get("title");
+        LocalDate date = LocalDate.parse((String) assessmentMap.get("date"));
+        Integer courseId = (Integer) assessmentMap.get("courseId");
+
+        Assessment assessment = assessmentService.updateAssessment(assessmentId, title, date, courseId);
+        return new ResponseEntity<>(assessment, HttpStatus.OK);
+    }
 }
