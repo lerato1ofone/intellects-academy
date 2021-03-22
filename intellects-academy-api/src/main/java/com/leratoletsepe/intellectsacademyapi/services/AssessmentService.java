@@ -34,4 +34,14 @@ public class AssessmentService implements IAssessmentService {
 
         return assessment;
     }
+
+    @Override
+    public Assessment updateAssessment(Integer assessmentId, String title, LocalDate date, Integer courseId) throws IaBadRequestException {
+        return null;
+    }
+
+    @Override
+    public void deleteAssessment(Integer assessmentId) throws IaBadRequestException {
+
+    }
 }
