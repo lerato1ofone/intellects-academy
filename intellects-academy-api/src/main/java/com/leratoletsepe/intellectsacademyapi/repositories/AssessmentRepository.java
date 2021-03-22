@@ -55,6 +55,16 @@ public class AssessmentRepository implements IAssessmentRepository {
         }
     }
 
+    @Override
+    public Assessment update(Integer assessmentId, String title, LocalDate date, Integer courseId) throws IaBadRequestException {
+        return null;
+    }
+
+    @Override
+    public void removeById(Integer assessmentId) throws IaBadRequestException {
+
+    }
+
     private RowMapper<Assessment> assessmentRowMapper = ((rs, rowNumber) -> {
         return new Assessment(
                 rs.getInt("ASSESSMENT_ID"),
