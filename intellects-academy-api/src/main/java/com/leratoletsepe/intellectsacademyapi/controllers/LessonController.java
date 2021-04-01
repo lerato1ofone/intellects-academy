@@ -31,4 +31,15 @@ public class LessonController {
         map.put("success", true);
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{lessonId}")
+    public ResponseEntity<Map<String, Boolean>> deleteLesson(HttpServletRequest request,
+                                                          @PathVariable("lessonId") Integer lessonId){
+        Integer userId = (Integer) request.getAttribute("userId");
+        lessonService.deleteLesson(userId, lessonId);
+
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
 }
