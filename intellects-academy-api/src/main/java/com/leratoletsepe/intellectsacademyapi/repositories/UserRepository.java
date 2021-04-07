@@ -101,10 +101,20 @@ public class UserRepository implements IUserRepository {
         }
     }
 
+    private void removeUserNotes(Integer userId) throws IaBadRequestException {
+        try {
+            jdbcTemplate.update(SQL_DELETE_USER_NOTES, new Object[]{ userId });
+        }
+        catch (EmptyResultDataAccessException ex) {
+            throw new IaNotFoundException("Failed to delete user's notes, try again later");
+        }
+    }
+
     @Override
     public void remove(Integer userId) throws IaBadRequestException {
         try {
-            jdbcTemplate.query(SQL_DELETE, new Object[]{ userId }, userDtoRowMapper);
+            this.removeUserNotes(userId);
+            jdbcTemplate.update(SQL_DELETE_USER, new Object[]{ userId });
         }
         catch (EmptyResultDataAccessException ex) {
             throw new IaNotFoundException("Failed to delete account, try again later");
