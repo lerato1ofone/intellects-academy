@@ -1,6 +1,7 @@
 package com.leratoletsepe.intellectsacademyapi.services;
 
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
+import com.leratoletsepe.intellectsacademyapi.exceptions.IaNotFoundException;
 import com.leratoletsepe.intellectsacademyapi.models.Course;
 import com.leratoletsepe.intellectsacademyapi.models.Lesson;
 import com.leratoletsepe.intellectsacademyapi.repositories.CourseRepository;
@@ -28,6 +29,11 @@ public class LessonService implements ILessonService {
         List<Lesson> lessons = addLessonToLessonsList(course.getLessons(), lessonId, title, date, content, courseId);
 
         courseRepository.addLesson(courseId, lessons);
+    }
+
+    @Override
+    public void deleteLesson(Integer userId, Integer lessonId) throws IaNotFoundException {
+        lessonRepository.removeById(userId, lessonId);
     }
 
     private List<Lesson> addLessonToLessonsList(List<Lesson> lessonList, Integer lessonId, String title, LocalDate date, String content, Integer courseId){
