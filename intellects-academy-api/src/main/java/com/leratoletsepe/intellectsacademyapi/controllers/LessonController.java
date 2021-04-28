@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/lesson")
+@RequestMapping("/api/course/{courseId}/lesson")
 public class LessonController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class LessonController {
                                                      @PathVariable("courseId") Integer courseId,
                                                      @RequestBody Map<String, Object> lessonMap){
         String title = (String) lessonMap.get("title");
-        Date lessonDate = (Date) lessonMap.get("date");
+        LocalDate lessonDate = LocalDate.parse((String) lessonMap.get("date"));
         String content = (String) lessonMap.get("content");
         lessonService.AddLesson(courseId, title, lessonDate, content);
 
