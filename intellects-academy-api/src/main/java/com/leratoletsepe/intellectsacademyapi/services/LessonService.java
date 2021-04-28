@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Service
 public class LessonService implements ILessonService {
@@ -15,7 +16,7 @@ public class LessonService implements ILessonService {
     LessonRepository lessonRepository;
 
     @Override
-    public void AddLesson(Integer courseId, String title, Date date, String content) throws IaBadRequestException {
+    public void AddLesson(Integer courseId, String title, LocalDate date, String content) throws IaBadRequestException {
         lessonRepository.create(courseId, title, date, content);
     }
 }
