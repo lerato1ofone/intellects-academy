@@ -25,7 +25,7 @@ public class LessonController {
         String title = (String) lessonMap.get("title");
         LocalDate lessonDate = LocalDate.parse((String) lessonMap.get("date"));
         String content = (String) lessonMap.get("content");
-        lessonService.AddLesson(courseId, title, lessonDate, content);
+        lessonService.addLesson(courseId, title, lessonDate, content);
 
         Map<String, Boolean> map = new HashMap<>();
         map.put("success", true);
