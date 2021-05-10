@@ -1,16 +1,16 @@
 package com.leratoletsepe.intellectsacademyapi.models;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Lesson {
 
     private Integer lessonId;
     private String title;
-    private Date lessonDate;
+    private LocalDate lessonDate;
     private String content;
     private Integer courseId;
 
-    public Lesson(Integer lessonId, String title, Date lessonDate, String content, Integer courseId) {
+    public Lesson(Integer lessonId, String title, LocalDate lessonDate, String content, Integer courseId) {
         this.lessonId = lessonId;
         this.title = title;
         this.lessonDate = lessonDate;
@@ -34,11 +34,11 @@ public class Lesson {
         this.title = title;
     }
 
-    public Date getLessonDate() {
+    public LocalDate getLessonDate() {
         return lessonDate;
     }
 
-    public void setLessonDate(Date lessonDate) {
+    public void setLessonDate(LocalDate lessonDate) {
         this.lessonDate = lessonDate;
     }
 
