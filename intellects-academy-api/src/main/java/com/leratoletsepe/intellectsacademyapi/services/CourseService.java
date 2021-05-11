@@ -1,6 +1,8 @@
 package com.leratoletsepe.intellectsacademyapi.services;
 
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
+import com.leratoletsepe.intellectsacademyapi.exceptions.IaNotFoundException;
+import com.leratoletsepe.intellectsacademyapi.models.Course;
 import com.leratoletsepe.intellectsacademyapi.models.Lesson;
 import com.leratoletsepe.intellectsacademyapi.repositories.CourseRepository;
 import com.leratoletsepe.intellectsacademyapi.services.interfaces.ICourseService;
@@ -17,5 +19,10 @@ public class CourseService implements ICourseService {
     @Override
     public void addCourse(Integer userId, String title, String description, List<Lesson> lessons) throws IaBadRequestException {
         courseRepository.create(userId, title, description, lessons);
+    }
+
+    @Override
+    public Course getCourse(Integer courseId) throws IaNotFoundException {
+        return courseRepository.findById(courseId);
     }
 }
