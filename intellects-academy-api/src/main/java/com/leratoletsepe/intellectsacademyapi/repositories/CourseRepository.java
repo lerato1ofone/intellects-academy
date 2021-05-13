@@ -26,6 +26,8 @@ public class CourseRepository implements ICourseRepository {
     private static  final String SQL_CREATE = "INSERT INTO IA_COURSES(COURSE_ID, USER_ID, TITLE, DESCRIPTION, LESSONS) " +
             "VALUES(NEXTVAL('IA_COURSES_SEQ'), ?, ?, ?, ?)";
 
+    private static final String SQL_ADD_LESSON = "UPDATE IA_COURSES SET LESSONS = ? WHERE COURSE_ID = ?";
+
     private static final String SQL_FIND_BY_ID = "SELECT USER_ID, COURSE_ID, TITLE, DESCRIPTION, LESSONS FROM IA_COURSES WHERE COURSE_ID = ?";
 
     @Autowired
@@ -55,6 +57,21 @@ public class CourseRepository implements ICourseRepository {
             return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new Object[]{ courseId }, courseRowMapper);
         } catch (Exception e){
             throw new IaNotFoundException("Course not found");
+        }
+    }
+
+    @Override
+    public void addLesson(Integer courseId, List<Lesson> lessons) throws IaBadRequestException {
+        try {
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(SQL_ADD_LESSON);
+                ps.setObject(1, lessons, Types.OTHER);
+                ps.setInt(2, courseId);
+                return ps;
+            });
+
+        } catch (Exception e) {
+            throw new IaBadRequestException("Failed to add lesson, try again later.");
         }
     }
 
