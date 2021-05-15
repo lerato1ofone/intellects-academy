@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,6 +37,14 @@ public class NoteController {
     public ResponseEntity<Note> getNote(HttpServletRequest request,
                                         @PathVariable("noteId") Integer noteId){
         Note note = noteService.getNote(noteId);
+        return new ResponseEntity<>(note, HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<Note>> getNotes(HttpServletRequest request){
+        Integer userId = (Integer) request.getAttribute("userId");
+
+        List<Note> note = noteService.getNotes(userId);
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
 }
