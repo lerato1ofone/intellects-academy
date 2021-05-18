@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,16 @@ public class NoteController {
                                         @PathVariable("noteId") Integer noteId){
         Note note = noteService.getNote(noteId);
         return new ResponseEntity<>(note, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{noteId}")
+    public ResponseEntity<Map<String, Boolean>> deleteNote(HttpServletRequest request,
+                                        @PathVariable("noteId") Integer noteId){
+        noteService.deleteNote(noteId);
+
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     @GetMapping("")
