@@ -62,7 +62,7 @@ foreign key (lesson_id) references ia_lessons(lesson_id);
 
 CREATE TABLE ia_assessments(
     assessment_id integer primary key not null,
-    title varchar(50) not null,
+    title varchar(250) not null,
     assessment_date date not null,
     course_id integer not null
 );
