@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Repository
 public class AssessmentRepository implements IAssessmentRepository {
 
-    private static final String SQL_CREATE = "INTO INTO IA_ASSESSMENTS(ASSESSMENT_ID, TITLE, ASSESSMENT_DATE, COURSE_ID) " +
+    private static final String SQL_CREATE = "INSERT INTO IA_ASSESSMENTS(ASSESSMENT_ID, TITLE, ASSESSMENT_DATE, COURSE_ID) " +
             "VALUES(NEXTVAL('IA_ASSESSMENTS_SEQ'), ?, ?, ?)";
 
     private static final String SQL_FIND_BY_ID = "SELECT ASSESSMENT_ID, TITLE, ASSESSMENT_DATE, COURSE_ID " +
