@@ -6,6 +6,7 @@ import com.leratoletsepe.intellectsacademyapi.models.Assessment;
 import com.leratoletsepe.intellectsacademyapi.repositories.interfaces.IAssessmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -46,11 +47,19 @@ public class AssessmentRepository implements IAssessmentRepository {
     }
 
     @Override
-    public Assessment findById(String assessmentId) throws IaNotFoundException {
+    public Assessment findById(Integer assessmentId) throws IaNotFoundException {
         try {
-
+            return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new Object[]{ assessmentId }, assessmentRowMapper);
         } catch (Exception e) {
             throw new IaNotFoundException("Assessment not found, try again later");
         }
     }
+
+    private RowMapper<Assessment> assessmentRowMapper = ((rs, rowNumber) -> {
+        return new Assessment(
+                rs.getInt("ASSESSMENT_ID"),
+                rs.getString("TITLE"),
+                LocalDate.parse(rs.getString("ASSESSMENT_DATE")),
+                rs.getInt("COURSE_ID"));
+    });
 }
