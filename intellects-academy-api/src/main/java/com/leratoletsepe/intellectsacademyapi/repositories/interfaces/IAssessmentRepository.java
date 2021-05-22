@@ -9,5 +9,5 @@ import java.time.LocalDate;
 public interface IAssessmentRepository {
     Integer create(String title, LocalDate date, Integer courseId) throws IaBadRequestException;
 
-    Assessment findById(String assessmentId) throws IaNotFoundException;
+    Assessment findById(Integer assessmentId) throws IaNotFoundException;
 }
