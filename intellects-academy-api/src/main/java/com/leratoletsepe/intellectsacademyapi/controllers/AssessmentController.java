@@ -26,7 +26,7 @@ public class AssessmentController {
                                                     @RequestBody Map<String, Object> assessmentMap){
         String title = (String) assessmentMap.get("title");
         LocalDate date = LocalDate.parse((String) assessmentMap.get("date"));
-        Integer courseId = Integer.parseInt((String) assessmentMap.get("courseId"));
+        Integer courseId = (Integer) assessmentMap.get("courseId");
 
         Assessment assessment = assessmentService.addAssessment(title, date, courseId);
         return new ResponseEntity<>(assessment, HttpStatus.OK);
