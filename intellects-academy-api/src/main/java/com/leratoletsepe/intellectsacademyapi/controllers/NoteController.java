@@ -31,4 +31,11 @@ public class NoteController {
         Note note = noteService.addNote(userId, lessonId, courseId, title, lessonDate, content);
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
+
+    @GetMapping("/{noteId}")
+    public ResponseEntity<Note> getNote(HttpServletRequest request,
+                                        @PathVariable("noteId") Integer noteId){
+        Note note = noteService.getNote(noteId);
+        return new ResponseEntity<>(note, HttpStatus.OK);
+    }
 }
