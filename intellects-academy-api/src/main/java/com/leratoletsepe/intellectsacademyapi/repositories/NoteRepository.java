@@ -22,6 +22,9 @@ public class NoteRepository implements INoteRepository {
     private static  final String SQL_CREATE = "INSERT INTO IA_NOTES(NOTE_ID, TITLE, NOTE_DATE, CONTENT, USER_ID, LESSON_ID) " +
             "VALUES(NEXTVAL('IA_NOTES_SEQ'), ?, ?, ?, ?, ?)";
 
+    private static  final String SQL_FIND_BY_ID = "SELECT NOTE_ID, TITLE, NOTE_DATE, CONTENT, USER_ID, LESSON_ID " +
+            "FROM IA_NOTES WHERE NOTE_ID = ?";
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -42,7 +45,26 @@ public class NoteRepository implements INoteRepository {
             return (Integer) keyHolder.getKeys().get("USER_ID");
 
         } catch (Exception e) {
-            throw new IaBadRequestException("Failed to create note, try again later");
+            throw new IaBadRequestException("Failed to create note, try again later.");
         }
     }
+
+    @Override
+    public Note findById(Integer noteId) throws IaNotFoundException {
+        try {
+            return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new Object[]{ noteId }, noteRowMapper);
+        } catch (Exception e) {
+            throw new IaNotFoundException("Note not found, try again later.");
+        }
+    }
+
+    private RowMapper<Note> noteRowMapper = ((rs, rowNumber) -> {
+        return new Note(
+                rs.getInt("NOTE_ID"),
+                rs.getString("TITLE"),
+                rs.getDate("NOTE_DATE"),
+                rs.getString("CONTENT"),
+                rs.getInt("USER_ID"),
+                rs.getInt("LESSON_ID"));
+    });
 }
