@@ -26,7 +26,7 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public Note getNot(Integer noteId) throws IaNotFoundException {
+    public Note getNote(Integer noteId) throws IaNotFoundException {
         Note note = noteRepository.findById(noteId);
         if(note == null)
             throw new IaNotFoundException("Note not found");
