@@ -24,6 +24,7 @@ public class IntellectsAcademyApiApplication {
 		registrationBean.setFilter(authFilter);
 		registrationBean.addUrlPatterns("/api/users/profile/*");
 		registrationBean.addUrlPatterns("/api/course/*");
+		registrationBean.addUrlPatterns("/api/note/*");
 		return registrationBean;
 	}
 }
