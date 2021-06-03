@@ -42,8 +42,7 @@ public class NoteRepository implements INoteRepository {
                 return ps;
             }, keyHolder);
 
-            return (Integer) keyHolder.getKeys().get("USER_ID");
-
+            return (Integer) keyHolder.getKeys().get("NOTE_ID");
         } catch (Exception e) {
             throw new IaBadRequestException("Failed to create note, try again later.");
         }
