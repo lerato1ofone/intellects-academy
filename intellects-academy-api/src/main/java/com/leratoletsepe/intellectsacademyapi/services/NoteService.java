@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class NoteService implements INoteService {
@@ -32,5 +33,14 @@ public class NoteService implements INoteService {
             throw new IaNotFoundException("Note not found");
 
         return note;
+    }
+
+    @Override
+    public List<Note> getNotes(Integer user) throws IaNotFoundException {
+        List<Note> notes = noteRepository.findAllForUser(user);
+        if(notes == null)
+            throw new IaNotFoundException("Notes not found for user");
+
+        return notes;
     }
 }
