@@ -15,6 +15,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public class NoteRepository implements INoteRepository {
@@ -24,6 +25,9 @@ public class NoteRepository implements INoteRepository {
 
     private static  final String SQL_FIND_BY_ID = "SELECT NOTE_ID, TITLE, NOTE_DATE, CONTENT, USER_ID, LESSON_ID " +
             "FROM IA_NOTES WHERE NOTE_ID = ?";
+
+    private static final String SQL_FIND_BY_USER = "SELECT NOTE_ID, TITLE, NOTE_DATE, CONTENT, USER_ID, LESSON_ID " +
+            "FROM IA_NOTES WHERE USER_ID = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -54,6 +58,15 @@ public class NoteRepository implements INoteRepository {
             return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new Object[]{ noteId }, noteRowMapper);
         } catch (Exception e) {
             throw new IaNotFoundException("Note not found, try again later.");
+        }
+    }
+
+    @Override
+    public List<Note> findAllForUser(Integer userId) throws IaNotFoundException {
+        try {
+            return jdbcTemplate.query(SQL_FIND_BY_USER, new Object[]{ userId }, noteRowMapper);
+        } catch (Exception e) {
+            throw new IaNotFoundException("Notes not found for user, try again later.");
         }
     }
 
