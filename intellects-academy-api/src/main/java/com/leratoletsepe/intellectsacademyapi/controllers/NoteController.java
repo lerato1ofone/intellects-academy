@@ -44,7 +44,8 @@ public class NoteController {
     @DeleteMapping("/{noteId}")
     public ResponseEntity<Map<String, Boolean>> deleteNote(HttpServletRequest request,
                                         @PathVariable("noteId") Integer noteId){
-        noteService.deleteNote(noteId);
+        Integer userId = (Integer) request.getAttribute("userId");
+        noteService.deleteNote(userId, noteId);
 
         Map<String, Boolean> map = new HashMap<>();
         map.put("success", true);
