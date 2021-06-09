@@ -53,4 +53,14 @@ public class LessonRepository implements ILessonRepository {
     public List<Lesson> findAll(Integer courseId) throws IaNotFoundException {
         return null;
     }
+
+    @Override
+    public void removeById(Integer userId, Integer lessonId) throws IaNotFoundException {
+        try {
+            jdbcTemplate.update(SQL_DELETE_LESSON, new Object[]{userId, lessonId});
+
+        } catch (Exception e){
+            throw new IaNotFoundException("Lesson not found, try again later.");
+        }
+    }
 }
