@@ -29,6 +29,8 @@ public class NoteRepository implements INoteRepository {
     private static final String SQL_FIND_BY_USER = "SELECT NOTE_ID, TITLE, NOTE_DATE, CONTENT, USER_ID, LESSON_ID " +
             "FROM IA_NOTES WHERE USER_ID = ?";
 
+    private static final String SQL_DELETE_NOTE = "DELETE FROM IA_NOTES WHERE USER_ID = ? AND NOTE_ID = ?";
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -67,6 +69,16 @@ public class NoteRepository implements INoteRepository {
             return jdbcTemplate.query(SQL_FIND_BY_USER, new Object[]{ userId }, noteRowMapper);
         } catch (Exception e) {
             throw new IaNotFoundException("Notes not found for user, try again later.");
+        }
+    }
+
+    @Override
+    public void removeById(Integer userId, Integer noteId) throws IaNotFoundException {
+        try {
+            jdbcTemplate.update(SQL_DELETE_NOTE, new Object[]{userId, noteId});
+
+        } catch (Exception e){
+            throw new IaNotFoundException("Note not found, try again later.");
         }
     }
 
