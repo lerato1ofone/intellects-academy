@@ -43,4 +43,9 @@ public class NoteService implements INoteService {
 
         return notes;
     }
+
+    @Override
+    public void deleteNote(Integer userId, Integer noteId) throws IaNotFoundException {
+        noteRepository.removeById(userId, noteId);
+    }
 }
