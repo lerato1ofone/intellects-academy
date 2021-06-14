@@ -13,4 +13,6 @@ public interface INoteRepository {
     Note findById(Integer noteId) throws IaNotFoundException;
 
     List<Note> findAllForUser(Integer userId) throws IaNotFoundException;
+
+    void removeById(Integer userId, Integer noteId) throws IaNotFoundException;
 }

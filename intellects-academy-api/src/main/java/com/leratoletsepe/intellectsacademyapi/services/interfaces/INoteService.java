@@ -13,4 +13,6 @@ public interface INoteService {
     Note getNote(Integer noteId) throws IaNotFoundException;
 
     List<Note> getNotes(Integer user) throws IaNotFoundException;
+
+    void deleteNote(Integer userId, Integer noteId) throws IaNotFoundException;
 }
