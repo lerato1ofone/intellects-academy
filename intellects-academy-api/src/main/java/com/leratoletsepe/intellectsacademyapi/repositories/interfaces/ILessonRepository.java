@@ -11,4 +11,6 @@ public interface ILessonRepository {
     Integer create(Integer courseId, String title, LocalDate date, String content) throws IaBadRequestException;
 
     List<Lesson> findAll(Integer courseId) throws IaNotFoundException;
+
+    void removeById(Integer userId, Integer lessonId) throws IaNotFoundException;
 }

@@ -25,6 +25,8 @@ public class LessonRepository implements ILessonRepository {
     private static final String SQL_FIND_BY_COURSE_ID = "SELECT LESSON_ID, TITLE, LESSON_DATE, CONTENT " +
             "FROM IA_LESSONS WHERE COURSE_ID = ?";
 
+    private static final String SQL_DELETE_LESSON = "DELETE FROM IA_LESSONS WHERE USER_ID = ? AND LESSON_ID = ?";
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
