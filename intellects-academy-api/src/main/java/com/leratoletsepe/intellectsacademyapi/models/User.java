@@ -108,12 +108,12 @@ public class User {
         this.officeNumber = officeNumber;
     }
 
-    public UserRole getUserType() {
+    public UserRole getUserRole() {
         return role;
     }
 
-    public void setUserType(UserRole userType) {
-        this.role = userType;
+    public void setUserRole(UserRole userRole) {
+        this.role = userRole;
     }
 
     public byte[] getAvatar() {
