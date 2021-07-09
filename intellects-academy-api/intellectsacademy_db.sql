@@ -1,10 +1,13 @@
 DROP DATABASE intellectsacademy;
 DROP USER admin;
+DROP type user_type;
 CREATE USER admin WITH PASSWORD 'password' CREATEDB;
 CREATE DATABASE intellectsacademy WITH template=template0 owner=admin;
 \connect intellectsacademy;
 ALTER default privileges grant all on tables to admin;
 ALTER default privileges grant all on sequences to admin;
+
+create TYPE user_type as ENUM('NONE', 'ADMIN', 'TEACHER', 'STUDENT');
 
 CREATE TABLE ia_users(
     user_id integer primary key not null,
@@ -13,19 +16,14 @@ CREATE TABLE ia_users(
     last_name varchar(20) not null,
     email varchar(30) not null,
     password text not null,
+    user_type user_type not null,
+    dob date,
+    semester_mark decimal(5,4),
+    office_number varchar(30),
     avatar bytea,
     notes jsonb,
-    courses jsonb 
+    courses jsonb
 );
-
-CREATE TABLE ia_students(
-    dob date not null,
-    semester_mark decimal(5,4) not null
-) inherits (ia_users);
-
-CREATE TABLE ia_teachers(
-    office_number varchar(30) not null
-) inherits (ia_users);
 
 CREATE TABLE ia_courses(
     course_id integer primary key not null,
