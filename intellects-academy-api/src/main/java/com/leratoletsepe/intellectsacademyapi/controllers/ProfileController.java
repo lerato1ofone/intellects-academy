@@ -1,6 +1,7 @@
 package com.leratoletsepe.intellectsacademyapi.controllers;
 
 import com.leratoletsepe.intellectsacademyapi.models.User;
+import com.leratoletsepe.intellectsacademyapi.models.dto.UserProfileDto;
 import com.leratoletsepe.intellectsacademyapi.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,18 +18,18 @@ public class ProfileController {
     ProfileService profileService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUser(HttpServletRequest request, @PathVariable("userId") Integer userId) {
-        User user = profileService.getUserProfileById(userId);
+    public ResponseEntity<UserProfileDto> getUser(HttpServletRequest request, @PathVariable("userId") Integer userId) {
+        UserProfileDto user = profileService.getUserProfileById(userId);
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("")
-    public ResponseEntity<User> updateUserProfile(HttpServletRequest request,
+    public ResponseEntity<UserProfileDto> updateUserProfile(HttpServletRequest request,
                                            @RequestBody User user){
         Integer userId = (Integer) request.getAttribute("userId");
 
-        User updatedUser = profileService.updateProfile(userId, user);
+        UserProfileDto updatedUser = profileService.updateProfile(userId, user);
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
