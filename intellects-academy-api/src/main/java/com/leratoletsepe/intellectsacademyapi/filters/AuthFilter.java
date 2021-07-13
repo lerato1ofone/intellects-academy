@@ -2,7 +2,6 @@ package com.leratoletsepe.intellectsacademyapi.filters;
 
 import com.leratoletsepe.intellectsacademyapi.utils.Constants;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.GenericFilterBean;
@@ -14,7 +13,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.http.HttpRequest;
 
 public class AuthFilter extends GenericFilterBean {
     @Override
