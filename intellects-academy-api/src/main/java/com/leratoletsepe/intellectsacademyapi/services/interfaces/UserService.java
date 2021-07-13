@@ -7,7 +7,7 @@ import com.leratoletsepe.intellectsacademyapi.models.dto.enums.UserType;
 
 public interface UserService {
 
-    User registerUser(String title, String firstName, String lastName, String email, String password, UserType.UserRole role) throws IaBadRequestException;
+    User registerUser(String title, String firstName, String lastName, String email, String password, String role) throws IaBadRequestException;
 
-    User getUserById(Integer userId) throws IaNotFoundException;
+    User loginUser(String email, String password) throws IaBadRequestException;
 }

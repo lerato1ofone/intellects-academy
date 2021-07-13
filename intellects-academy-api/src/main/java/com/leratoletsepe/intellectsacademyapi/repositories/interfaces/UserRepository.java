@@ -1,6 +1,7 @@
 package com.leratoletsepe.intellectsacademyapi.repositories.interfaces;
 
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
+import com.leratoletsepe.intellectsacademyapi.exceptions.IaNotFoundException;
 import com.leratoletsepe.intellectsacademyapi.models.dto.User;
 import com.leratoletsepe.intellectsacademyapi.models.dto.enums.UserType.UserRole;
 
@@ -14,5 +15,7 @@ public interface UserRepository {
 
     Integer getCountByEmail(String email);
 
-    User findById(Integer userId);
+    User findById(Integer userId) throws IaNotFoundException;
+
+    com.leratoletsepe.intellectsacademyapi.models.User getUserProfileById(Integer userId) throws IaNotFoundException;
 }

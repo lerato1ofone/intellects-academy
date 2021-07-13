@@ -17,7 +17,7 @@ public class UserService implements com.leratoletsepe.intellectsacademyapi.servi
     UserRepository userRepository;
 
     @Override
-    public User registerUser(String title, String firstName, String lastName, String email, String password, UserType.UserRole role) throws IaBadRequestException {
+    public User registerUser(String title, String firstName, String lastName, String email, String password, String role) throws IaBadRequestException {
         Pattern pattern = Pattern.compile("^(.+)@(.+)$");
 
         if(email != null)
@@ -30,17 +30,24 @@ public class UserService implements com.leratoletsepe.intellectsacademyapi.servi
         if(count > 0)
             throw new IaBadRequestException("Email already in use");
 
-        Integer userId = userRepository.create(title, firstName, lastName, email, password, role);
+        UserType.UserRole userRole = UserType.UserRole.valueOf(role.toUpperCase());
+
+        Integer userId = userRepository.create(title, firstName, lastName, email, password, userRole);
 
         return userRepository.findById(userId);
     }
 
     @Override
-    public User getUserById(Integer userId) throws IaNotFoundException {
-        User user =  userRepository.findById(userId);
+    public User loginUser(String email, String password) throws IaBadRequestException {
+        Pattern pattern = Pattern.compile("^(.+)@(.+)$");
 
-        if(user == null)
-            throw new IaNotFoundException("User not found");
+        if(email != null)
+            email = email.toLowerCase();
+
+        if(!pattern.matcher(email).matches())
+            throw new IaBadRequestException("Invalid email format");
+
+        User user = userRepository.findByEmailAndPassword(email, password);
 
         return user;
     }
