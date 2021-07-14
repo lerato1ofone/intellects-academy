@@ -8,6 +8,7 @@ import com.leratoletsepe.intellectsacademyapi.models.Course;
 import com.leratoletsepe.intellectsacademyapi.models.Note;
 import com.leratoletsepe.intellectsacademyapi.models.dto.User;
 import com.leratoletsepe.intellectsacademyapi.models.dto.enums.UserType.UserRole;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,7 +35,7 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
 
     private static final String SQL_FINDWHOLEUSER_BY_ID = "SELECT USER_ID, TITLE, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE, DOB, SEMESTER_MARK, OFFICE_NUMBER, AVATAR, NOTES, COURSES  FROM IA_USERS WHERE USER_ID = ?";
 
-    private static final String SQL_FIND_BY_EMAIL_PASSWORD = "SELECT USER_ID, TITLE, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE FROM IA_USERS WHERE EMAIL = ? AND PASSWORD = ?";
+    private static final String SQL_FIND_BY_EMAIL = "SELECT USER_ID, TITLE, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE FROM IA_USERS WHERE EMAIL = ?";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -45,6 +46,9 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
     public Integer create(String title, String firstName, String lastName, String email, String password, UserRole role) throws IaBadRequestException {
         try
         {
+            // Hashing the user's password before storing on db to encode plain text - using BCrypt
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(10));
+
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS);
@@ -52,7 +56,7 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
                 ps.setString(2, firstName);
                 ps.setString(3, lastName);
                 ps.setString(4, email);
-                ps.setString(5, password);
+                ps.setString(5, hashedPassword);
                 ps.setObject(6 , role, java.sql.Types.OTHER);
                 return ps;
             }, keyHolder);
@@ -67,10 +71,15 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
     @Override
     public User findByEmailAndPassword(String email, String password) throws IaBadRequestException {
         try{
-            return jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL_PASSWORD, new Object[]{email, password}, userDtoRowMapper);
+            User user = jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL, new Object[]{email}, userDtoRowMapper);
+
+            if(!BCrypt.checkpw(password, user.getPassword()))
+                throw new IaBadRequestException("Invalid email or password");
+
+            return user;
         }
         catch(EmptyResultDataAccessException ex){
-            throw new IaBadRequestException("Invalid credentials.");
+            throw new IaBadRequestException("Invalid email or password.");
         }
     }
 
