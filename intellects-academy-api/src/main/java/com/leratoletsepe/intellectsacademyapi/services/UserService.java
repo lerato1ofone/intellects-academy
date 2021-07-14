@@ -1,7 +1,6 @@
 package com.leratoletsepe.intellectsacademyapi.services;
 
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
-import com.leratoletsepe.intellectsacademyapi.exceptions.IaNotFoundException;
 import com.leratoletsepe.intellectsacademyapi.models.dto.User;
 import com.leratoletsepe.intellectsacademyapi.models.dto.enums.UserType;
 import com.leratoletsepe.intellectsacademyapi.repositories.UserRepository;
@@ -38,17 +37,10 @@ public class UserService implements com.leratoletsepe.intellectsacademyapi.servi
     }
 
     @Override
-    public User loginUser(String email, String password) throws IaBadRequestException {
-        Pattern pattern = Pattern.compile("^(.+)@(.+)$");
-
+    public User validateUser(String email, String password) throws IaBadRequestException {
         if(email != null)
             email = email.toLowerCase();
 
-        if(!pattern.matcher(email).matches())
-            throw new IaBadRequestException("Invalid email format");
-
-        User user = userRepository.findByEmailAndPassword(email, password);
-
-        return user;
+        return userRepository.findByEmailAndPassword(email, password);
     }
 }

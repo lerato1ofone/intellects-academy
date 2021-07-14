@@ -39,7 +39,7 @@ public class UserController {
         String email = (String) userMap.get("email");
         String password = (String) userMap.get("password");
 
-        User user = userService.loginUser(email, password);
+        User user = userService.validateUser(email, password);
         return new ResponseEntity<>(generateJWTToken(user), HttpStatus.OK);
     }
 

@@ -9,5 +9,5 @@ public interface UserService {
 
     User registerUser(String title, String firstName, String lastName, String email, String password, String role) throws IaBadRequestException;
 
-    User loginUser(String email, String password) throws IaBadRequestException;
+    User validateUser(String email, String password) throws IaBadRequestException;
 }
