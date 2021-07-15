@@ -1,8 +1,8 @@
 package com.leratoletsepe.intellectsacademyapi.services;
 
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
-import com.leratoletsepe.intellectsacademyapi.models.dto.User;
-import com.leratoletsepe.intellectsacademyapi.models.dto.enums.UserType;
+import com.leratoletsepe.intellectsacademyapi.models.dto.UserDto;
+import com.leratoletsepe.intellectsacademyapi.models.enums.UserType;
 import com.leratoletsepe.intellectsacademyapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class UserService implements com.leratoletsepe.intellectsacademyapi.servi
     UserRepository userRepository;
 
     @Override
-    public User registerUser(String title, String firstName, String lastName, String email, String password, String role) throws IaBadRequestException {
+    public UserDto registerUser(String title, String firstName, String lastName, String email, String password, String role) throws IaBadRequestException {
         Pattern pattern = Pattern.compile("^(.+)@(.+)$");
 
         if(email != null)
@@ -37,7 +37,7 @@ public class UserService implements com.leratoletsepe.intellectsacademyapi.servi
     }
 
     @Override
-    public User validateUser(String email, String password) throws IaBadRequestException {
+    public UserDto validateUser(String email, String password) throws IaBadRequestException {
         if(email != null)
             email = email.toLowerCase();
 
