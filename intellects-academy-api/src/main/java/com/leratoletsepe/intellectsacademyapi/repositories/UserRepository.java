@@ -6,8 +6,9 @@ import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaNotFoundException;
 import com.leratoletsepe.intellectsacademyapi.models.Course;
 import com.leratoletsepe.intellectsacademyapi.models.Note;
-import com.leratoletsepe.intellectsacademyapi.models.dto.User;
-import com.leratoletsepe.intellectsacademyapi.models.dto.enums.UserType.UserRole;
+import com.leratoletsepe.intellectsacademyapi.models.User;
+import com.leratoletsepe.intellectsacademyapi.models.dto.UserDto;
+import com.leratoletsepe.intellectsacademyapi.models.enums.UserType.UserRole;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -33,9 +34,12 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
 
     private static final String SQL_FIND_BY_ID = "SELECT USER_ID, TITLE, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE FROM IA_USERS WHERE USER_ID = ?";
 
-    private static final String SQL_FINDWHOLEUSER_BY_ID = "SELECT USER_ID, TITLE, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE, DOB, SEMESTER_MARK, OFFICE_NUMBER, AVATAR, NOTES, COURSES  FROM IA_USERS WHERE USER_ID = ?";
+    private static final String SQL_FINDWHOLEUSER_BY_ID = "SELECT USER_ID, TITLE, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE, DOB, SEMESTER_MARK, OFFICE_NUMBER, AVATAR, NOTES, COURSES FROM IA_USERS WHERE USER_ID = ?";
 
     private static final String SQL_FIND_BY_EMAIL = "SELECT USER_ID, TITLE, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE FROM IA_USERS WHERE EMAIL = ?";
+
+    private static final String SQL_UPDATE = "UPDATE IA_USERS SET TITLE = ?, FIRST_NAME = ?, LAST_NAME = ?, EMAIL = ?, ROLE = ?, DOB = ?, OFFICE_NUMBER = ?, AVATAR = ?, NOTES = ?, COURSES = ? " +
+            "WHERE USER_ID = ?";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -69,9 +73,33 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
     }
 
     @Override
-    public User findByEmailAndPassword(String email, String password) throws IaBadRequestException {
+    public void update(Integer userId, com.leratoletsepe.intellectsacademyapi.models.User user) throws IaBadRequestException {
+        try {
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(SQL_UPDATE);
+                ps.setString(1, user.getTitle());
+                ps.setString(2, user.getFirstName());
+                ps.setString(3, user.getLastName());
+                ps.setString(4, user.getEmail());
+                ps.setObject(5 , user.getUserRole(), java.sql.Types.OTHER);
+                ps.setDate(6, user.getDob());
+                ps.setString(7, user.getOfficeNumber());
+                ps.setBytes(8, user.getAvatar());
+                ps.setObject(9, user.getNotes(), java.sql.Types.OTHER);
+                ps.setObject(10, user.getCourses(), java.sql.Types.OTHER);
+                ps.setInt(11, userId);
+                return ps;
+            });
+
+        } catch ( Exception e){
+            throw new IaBadRequestException("Invalid request details. Failed to update profile");
+        }
+    }
+
+    @Override
+    public UserDto findByEmailAndPassword(String email, String password) throws IaBadRequestException {
         try{
-            User user = jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL, new Object[]{email}, userDtoRowMapper);
+            UserDto user = jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL, new Object[]{email}, userDtoRowMapper);
 
             if(!BCrypt.checkpw(password, user.getPassword()))
                 throw new IaBadRequestException("Invalid email or password");
@@ -89,26 +117,26 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
     }
 
     @Override
-    public User findById(Integer userId) throws IaNotFoundException {
-        try{
-            return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new Object[]{userId}, userDtoRowMapper);
+    public UserDto findById(Integer userId) throws IaNotFoundException {
+        try {
+            return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new Object[]{ userId }, userDtoRowMapper);
         }
-        catch(EmptyResultDataAccessException ex){
+        catch (EmptyResultDataAccessException ex) {
             throw new IaNotFoundException("User with id " + userId + " not found");
         }
     }
 
-    public com.leratoletsepe.intellectsacademyapi.models.User getUserProfileById(Integer userId) throws IaNotFoundException{
+    public User getUserProfileById(Integer userId) throws IaNotFoundException{
         try{
             return jdbcTemplate.queryForObject(SQL_FINDWHOLEUSER_BY_ID, new Object[]{ userId }, userRowMapper);
         }
-        catch(EmptyResultDataAccessException ex){
+        catch (EmptyResultDataAccessException ex) {
             throw new IaNotFoundException("User with id " + userId + " not found");
         }
     }
 
-    private RowMapper<User> userDtoRowMapper = ((rs, rowNumber) -> {
-        return new User(
+    private RowMapper<UserDto> userDtoRowMapper = ((rs, rowNumber) -> {
+        return new UserDto(
                 rs.getInt("USER_ID"),
                 rs.getString("TITLE"),
                 rs.getString("FIRST_NAME"),
@@ -118,7 +146,7 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
                rs.getString("ROLE"));
     });
 
-    private RowMapper<com.leratoletsepe.intellectsacademyapi.models.User> userRowMapper = ((rs, rowNumber) -> {
+    private RowMapper<User> userRowMapper = ((rs, rowNumber) -> {
 
         var notesResultSet = rs.getString("NOTES");
         var coursesResultSet = rs.getString("COURSES");
@@ -129,7 +157,7 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
         List<Course> courses = coursesResultSet == null ? new ArrayList<>() :
                 Arrays.asList(new Gson().fromJson(coursesResultSet, Course[].class));
 
-        return new com.leratoletsepe.intellectsacademyapi.models.User(
+        return new User(
                 rs.getInt("USER_ID"),
                 rs.getString("TITLE"),
                 rs.getString("FIRST_NAME"),
@@ -143,6 +171,6 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
                 rs.getBytes("AVATAR"),
                 notes,
                 courses
-                );
+        );
     });
 }
