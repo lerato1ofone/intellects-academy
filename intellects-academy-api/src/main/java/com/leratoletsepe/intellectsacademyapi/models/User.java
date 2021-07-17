@@ -1,6 +1,6 @@
 package com.leratoletsepe.intellectsacademyapi.models;
 
-import com.leratoletsepe.intellectsacademyapi.models.dto.enums.UserType.UserRole;
+import com.leratoletsepe.intellectsacademyapi.models.enums.UserType.UserRole;
 
 import java.sql.Date;
 import java.util.List;
