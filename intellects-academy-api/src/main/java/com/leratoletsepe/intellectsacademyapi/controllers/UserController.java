@@ -1,6 +1,6 @@
 package com.leratoletsepe.intellectsacademyapi.controllers;
 
-import com.leratoletsepe.intellectsacademyapi.models.dto.User ;
+import com.leratoletsepe.intellectsacademyapi.models.dto.UserDto;
 import com.leratoletsepe.intellectsacademyapi.services.UserService;
 import com.leratoletsepe.intellectsacademyapi.utils.Constants;
 import io.jsonwebtoken.Jwts;
@@ -30,7 +30,7 @@ public class UserController {
         String password = (String) userMap.get("password");
         String role = (String) userMap.get("role");
 
-        User user = userService.registerUser(title, firstName, lastName, email, password, role);
+        UserDto user = userService.registerUser(title, firstName, lastName, email, password, role);
         return new ResponseEntity<>(generateJWTToken(user), HttpStatus.OK);
     }
 
@@ -39,11 +39,11 @@ public class UserController {
         String email = (String) userMap.get("email");
         String password = (String) userMap.get("password");
 
-        User user = userService.validateUser(email, password);
+        UserDto user = userService.validateUser(email, password);
         return new ResponseEntity<>(generateJWTToken(user), HttpStatus.OK);
     }
 
-    private Map<String, String> generateJWTToken(User user){
+    private Map<String, String> generateJWTToken(UserDto user){
         long timestamp = System.currentTimeMillis();
 
         String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SECRET_KEY)
