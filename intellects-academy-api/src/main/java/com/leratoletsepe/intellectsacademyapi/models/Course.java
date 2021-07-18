@@ -1,14 +1,16 @@
 package com.leratoletsepe.intellectsacademyapi.models;
 
+import java.util.List;
+
 public class Course {
 
     private Integer courseId;
     private Integer userId;
     private String title;
     private String description;
-    private Lesson[] lessons;
+    private List<Lesson> lessons;
 
-    public Course(Integer courseId, Integer userId, String title, String description, Lesson[] lessons) {
+    public Course(Integer courseId, Integer userId, String title, String description, List<Lesson> lessons) {
         this.courseId = courseId;
         this.userId = userId;
         this.title = title;
@@ -48,11 +50,11 @@ public class Course {
         this.description = description;
     }
 
-    public Lesson[] getLessons() {
+    public List<Lesson> getLessons() {
         return lessons;
     }
 
-    public void setLessons(Lesson[] lessons) {
+    public void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
     }
 }
