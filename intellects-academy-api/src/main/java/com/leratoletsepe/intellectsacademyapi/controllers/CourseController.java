@@ -1,6 +1,6 @@
 package com.leratoletsepe.intellectsacademyapi.controllers;
 
-import com.leratoletsepe.intellectsacademyapi.models.Course;
+import com.leratoletsepe.intellectsacademyapi.models.Lesson;
 import com.leratoletsepe.intellectsacademyapi.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/course")
+@RequestMapping("/api/course")
 public class CourseController {
 
     @Autowired
@@ -23,9 +24,12 @@ public class CourseController {
 
     @PostMapping("")
     public ResponseEntity<Map<String, Boolean>> addCourse(HttpServletRequest request,
-                                                    @RequestBody Course course){
+                                                    @RequestBody Map<String, Object> courseMap){
         Integer userId = (Integer) request.getAttribute("userId");
-        courseService.addCourse(userId, course);
+        String title = (String) courseMap.get("title");
+        String descriptions = (String) courseMap.get("description");
+        List<Lesson> lessonList = (List<Lesson>) courseMap.get("lessons");
+        courseService.addCourse(userId, title, descriptions, lessonList);
 
         Map<String, Boolean> map = new HashMap<>();
         map.put("success", true);
