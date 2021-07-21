@@ -6,5 +6,5 @@ import com.leratoletsepe.intellectsacademyapi.models.Lesson;
 import java.util.List;
 
 public interface ICourseRepository {
-    void create(Integer userId, Integer courseId, String title, String description, List<Lesson> lessons) throws IaBadRequestException;
+    void create(Integer userId, String title, String description, List<Lesson> lessons) throws IaBadRequestException;
 }
