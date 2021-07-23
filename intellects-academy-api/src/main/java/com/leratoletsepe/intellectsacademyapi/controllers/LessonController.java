@@ -1,5 +1,6 @@
 package com.leratoletsepe.intellectsacademyapi.controllers;
 
+import com.leratoletsepe.intellectsacademyapi.models.Lesson;
 import com.leratoletsepe.intellectsacademyapi.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -41,5 +43,13 @@ public class LessonController {
         Map<String, Boolean> map = new HashMap<>();
         map.put("success", true);
         return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<Lesson>> getLessons(HttpServletRequest request){
+        Integer userId = (Integer) request.getAttribute("userId");
+
+        List<Lesson> lessons = lessonService.getLessons(userId);
+        return new ResponseEntity<>(lessons, HttpStatus.OK);
     }
 }
