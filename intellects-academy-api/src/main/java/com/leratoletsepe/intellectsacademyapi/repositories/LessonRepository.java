@@ -3,9 +3,11 @@ package com.leratoletsepe.intellectsacademyapi.repositories;
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaNotFoundException;
 import com.leratoletsepe.intellectsacademyapi.models.Lesson;
+import com.leratoletsepe.intellectsacademyapi.models.Note;
 import com.leratoletsepe.intellectsacademyapi.repositories.interfaces.ILessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -22,7 +24,7 @@ public class LessonRepository implements ILessonRepository {
     private static  final String SQL_CREATE = "INSERT INTO IA_LESSONS(LESSON_ID, TITLE, LESSON_DATE, CONTENT, COURSE_ID) " +
             "VALUES(NEXTVAL('IA_LESSONS_SEQ'), ?, ?, ?, ?)";
 
-    private static final String SQL_FIND_BY_COURSE_ID = "SELECT LESSON_ID, TITLE, LESSON_DATE, CONTENT " +
+    private static final String SQL_FIND_BY_COURSE_ID = "SELECT LESSON_ID, TITLE, LESSON_DATE, CONTENT, COURSE_ID " +
             "FROM IA_LESSONS WHERE COURSE_ID = ?";
 
     private static final String SQL_DELETE_LESSON = "DELETE FROM IA_LESSONS WHERE USER_ID = ? AND LESSON_ID = ?";
@@ -51,7 +53,11 @@ public class LessonRepository implements ILessonRepository {
 
     @Override
     public List<Lesson> findAll(Integer courseId) throws IaNotFoundException {
-        return null;
+        try {
+            return jdbcTemplate.query(SQL_FIND_BY_COURSE_ID, new Object[]{ courseId }, lessonRowMapper);
+        } catch (Exception e) {
+            throw new IaNotFoundException("Lessons not found, try again later.");
+        }
     }
 
     @Override
@@ -63,4 +69,13 @@ public class LessonRepository implements ILessonRepository {
             throw new IaNotFoundException("Lesson not found, try again later.");
         }
     }
+
+    private RowMapper<Lesson> lessonRowMapper = ((rs, rowNumber) -> {
+        return new Lesson(
+                rs.getInt("LESSON_ID"),
+                rs.getString("TITLE"),
+                LocalDate.parse(rs.getString("LESSON_DATE")),
+                rs.getString("CONTENT"),
+                rs.getInt("COURSE_ID"));
+    });
 }
