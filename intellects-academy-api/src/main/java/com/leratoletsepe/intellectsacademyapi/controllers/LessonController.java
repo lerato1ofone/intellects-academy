@@ -46,10 +46,9 @@ public class LessonController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Lesson>> getLessons(HttpServletRequest request){
-        Integer userId = (Integer) request.getAttribute("userId");
-
-        List<Lesson> lessons = lessonService.getLessons(userId);
+    public ResponseEntity<List<Lesson>> getLessons(HttpServletRequest request,
+                                                   @PathVariable("courseId") Integer courseId){
+        List<Lesson> lessons = lessonService.getLessons(courseId);
         return new ResponseEntity<>(lessons, HttpStatus.OK);
     }
 }
