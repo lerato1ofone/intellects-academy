@@ -30,6 +30,9 @@ public class CourseRepository implements ICourseRepository {
 
     private static final String SQL_FIND_BY_ID = "SELECT USER_ID, COURSE_ID, TITLE, DESCRIPTION, LESSONS FROM IA_COURSES WHERE COURSE_ID = ?";
 
+    private static final String SQL_UPDATE = "UPDATE IA_COURSES SET TITLE = ?, DESCRIPTION = ?, LESSONS = ? " +
+            "WHERE COURSE_ID = ? AND USER_ID = ?";
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -72,6 +75,23 @@ public class CourseRepository implements ICourseRepository {
 
         } catch (Exception e) {
             throw new IaBadRequestException("Failed to add lesson, try again later.");
+        }
+    }
+
+    @Override
+    public void update(Integer userId, Integer courseId, String title, String description, List<Lesson> lessons) throws IaBadRequestException {
+        try {
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(SQL_UPDATE);
+                ps.setString(1, title);
+                ps.setString(2, description);
+                ps.setObject(3, lessons, Types.OTHER);
+                ps.setInt(4, courseId);
+                ps.setInt(5, userId);
+                return ps;
+            });
+        } catch (Exception e) {
+            throw new IaBadRequestException("Invalid request details. Failed to update lesson");
         }
     }
 
