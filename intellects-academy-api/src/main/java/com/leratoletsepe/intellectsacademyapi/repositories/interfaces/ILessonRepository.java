@@ -15,4 +15,6 @@ public interface ILessonRepository {
     void removeById(Integer userId, Integer lessonId) throws IaNotFoundException;
 
     Lesson findById(Integer lessonId) throws IaNotFoundException;
+
+    Lesson update(Integer lessonId, String title, LocalDate date, String content) throws IaBadRequestException;
 }
