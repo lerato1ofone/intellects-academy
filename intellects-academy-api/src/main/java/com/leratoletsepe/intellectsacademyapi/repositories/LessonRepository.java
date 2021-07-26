@@ -31,6 +31,9 @@ public class LessonRepository implements ILessonRepository {
 
     private static final String SQL_DELETE_LESSON = "DELETE FROM IA_LESSONS WHERE USER_ID = ? AND LESSON_ID = ?";
 
+    private static final String SQL_UPDATE = "UPDATE IA_LESSONS SET TITLE = ?, LESSON_DATE = ?, CONTENT = ? " +
+            "WHERE LESSON_ID = ?";
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -66,7 +69,6 @@ public class LessonRepository implements ILessonRepository {
     public void removeById(Integer userId, Integer lessonId) throws IaNotFoundException {
         try {
             jdbcTemplate.update(SQL_DELETE_LESSON, new Object[]{userId, lessonId});
-
         } catch (Exception e){
             throw new IaNotFoundException("Lesson not found, try again later.");
         }
@@ -78,6 +80,16 @@ public class LessonRepository implements ILessonRepository {
             return jdbcTemplate.queryForObject(SQL_FIND_ID, new Object[]{ lessonId }, lessonRowMapper);
         } catch (Exception e){
             throw new IaNotFoundException("Course not found");
+        }
+    }
+
+    @Override
+    public Lesson update(Integer lessonId, String title, LocalDate date, String content) throws IaBadRequestException {
+        try {
+            jdbcTemplate.update(SQL_UPDATE, new Object[]{title, date, content, lessonId});
+            return this.findById(lessonId);
+        } catch (Exception e) {
+            throw new IaBadRequestException("Invalid request details. Failed to update lesson");
         }
     }
 
