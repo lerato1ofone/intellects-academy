@@ -51,4 +51,11 @@ public class LessonController {
         List<Lesson> lessons = lessonService.getLessons(courseId);
         return new ResponseEntity<>(lessons, HttpStatus.OK);
     }
+
+    @GetMapping("/{lessonId}")
+    public ResponseEntity<Lesson> getLesson(HttpServletRequest request,
+                                            @PathVariable("lessonId") Integer lessonId){
+        Lesson lesson = lessonService.getLesson(lessonId);
+        return new ResponseEntity<>(lesson, HttpStatus.OK);
+    }
 }

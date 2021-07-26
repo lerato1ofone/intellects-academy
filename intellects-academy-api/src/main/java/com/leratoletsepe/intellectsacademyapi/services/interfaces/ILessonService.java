@@ -13,4 +13,6 @@ public interface ILessonService {
     void deleteLesson(Integer userId, Integer lessonId) throws IaNotFoundException;
 
     List<Lesson> getLessons(Integer courseId) throws IaNotFoundException;
+
+    Lesson getLesson(Integer lessonId) throws IaNotFoundException;
 }

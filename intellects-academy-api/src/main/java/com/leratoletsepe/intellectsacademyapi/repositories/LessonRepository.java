@@ -3,7 +3,6 @@ package com.leratoletsepe.intellectsacademyapi.repositories;
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaNotFoundException;
 import com.leratoletsepe.intellectsacademyapi.models.Lesson;
-import com.leratoletsepe.intellectsacademyapi.models.Note;
 import com.leratoletsepe.intellectsacademyapi.repositories.interfaces.ILessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,6 +25,9 @@ public class LessonRepository implements ILessonRepository {
 
     private static final String SQL_FIND_BY_COURSE_ID = "SELECT LESSON_ID, TITLE, LESSON_DATE, CONTENT, COURSE_ID " +
             "FROM IA_LESSONS WHERE COURSE_ID = ?";
+
+    private static final String SQL_FIND_ID = "SELECT LESSON_ID, TITLE, LESSON_DATE, CONTENT, COURSE_ID " +
+            "FROM IA_LESSONS WHERE LESSON_ID = ?";
 
     private static final String SQL_DELETE_LESSON = "DELETE FROM IA_LESSONS WHERE USER_ID = ? AND LESSON_ID = ?";
 
@@ -67,6 +69,15 @@ public class LessonRepository implements ILessonRepository {
 
         } catch (Exception e){
             throw new IaNotFoundException("Lesson not found, try again later.");
+        }
+    }
+
+    @Override
+    public Lesson findById(Integer lessonId) throws IaNotFoundException {
+        try {
+            return jdbcTemplate.queryForObject(SQL_FIND_ID, new Object[]{ lessonId }, lessonRowMapper);
+        } catch (Exception e){
+            throw new IaNotFoundException("Course not found");
         }
     }
 

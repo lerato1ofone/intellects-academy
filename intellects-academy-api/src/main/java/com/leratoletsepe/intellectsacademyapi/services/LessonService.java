@@ -45,6 +45,15 @@ public class LessonService implements ILessonService {
         return lessons;
     }
 
+    @Override
+    public Lesson getLesson(Integer lessonId) throws IaNotFoundException {
+        Lesson lesson = lessonRepository.findById(lessonId);
+        if(lesson == null)
+            throw new IaNotFoundException("Lesson not found");
+
+        return lesson;
+    }
+
     private List<Lesson> addLessonToLessonsList(List<Lesson> lessonList, Integer lessonId, String title, LocalDate date, String content, Integer courseId){
         Lesson lesson = new Lesson(
                 lessonId,

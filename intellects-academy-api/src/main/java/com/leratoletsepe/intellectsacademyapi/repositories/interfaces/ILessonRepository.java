@@ -13,4 +13,6 @@ public interface ILessonRepository {
     List<Lesson> findAll(Integer courseId) throws IaNotFoundException;
 
     void removeById(Integer userId, Integer lessonId) throws IaNotFoundException;
+
+    Lesson findById(Integer lessonId) throws IaNotFoundException;
 }
