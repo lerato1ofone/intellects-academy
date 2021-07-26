@@ -25,4 +25,14 @@ public class CourseService implements ICourseService {
     public Course getCourse(Integer courseId) throws IaNotFoundException {
         return courseRepository.findById(courseId);
     }
+
+    @Override
+    public Course updateCourse(Integer userId, Integer courseId, String title, String description, List<Lesson> lessons) throws IaBadRequestException {
+        courseRepository.update(userId, courseId, title, description, lessons);
+        Course course = courseRepository.findById(courseId);
+        if(course == null)
+            throw new IaBadRequestException("Failed to updated course");
+
+        return course;
+    }
 }
