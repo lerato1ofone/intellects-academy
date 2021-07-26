@@ -11,4 +11,6 @@ public interface ICourseService {
     void addCourse(Integer userId, String title, String description, List<Lesson> lessons) throws IaBadRequestException;
 
     Course getCourse(Integer courseId) throws IaNotFoundException;
+
+    Course updateCourse(Integer userId, Integer courseId, String title, String description, List<Lesson> lessons) throws IaBadRequestException;
 }
