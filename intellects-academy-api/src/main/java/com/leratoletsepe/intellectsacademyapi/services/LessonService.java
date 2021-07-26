@@ -54,6 +54,15 @@ public class LessonService implements ILessonService {
         return lesson;
     }
 
+    @Override
+    public Lesson updateLesson(Integer lessonId, String title, LocalDate date, String content) throws IaBadRequestException {
+        Lesson lesson = lessonRepository.update(lessonId, title, date, content);
+        if(lesson == null)
+            throw new IaBadRequestException("Failed to update lesson");
+
+        return lesson;
+    }
+
     private List<Lesson> addLessonToLessonsList(List<Lesson> lessonList, Integer lessonId, String title, LocalDate date, String content, Integer courseId){
         Lesson lesson = new Lesson(
                 lessonId,
