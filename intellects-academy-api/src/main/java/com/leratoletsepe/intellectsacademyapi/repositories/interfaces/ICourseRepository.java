@@ -13,4 +13,6 @@ public interface ICourseRepository {
     Course findById(Integer courseId) throws IaNotFoundException;
 
     void addLesson(Integer courseId, List<Lesson> lessons) throws IaBadRequestException;
+
+    void update(Integer userId, Integer courseId, String title, String description, List<Lesson> lessons) throws IaBadRequestException;
 }
