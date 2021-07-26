@@ -15,4 +15,6 @@ public interface ILessonService {
     List<Lesson> getLessons(Integer courseId) throws IaNotFoundException;
 
     Lesson getLesson(Integer lessonId) throws IaNotFoundException;
+
+    Lesson updateLesson(Integer lessonId,String title, LocalDate date, String content) throws IaBadRequestException;
 }
