@@ -58,4 +58,16 @@ public class LessonController {
         Lesson lesson = lessonService.getLesson(lessonId);
         return new ResponseEntity<>(lesson, HttpStatus.OK);
     }
+
+    @PutMapping("/{lessonId}")
+    public ResponseEntity<Lesson> updateLesson(HttpServletRequest request,
+                                               @PathVariable("lessonId") Integer lessonId,
+                                               @RequestBody Map<String, Object> lessonMap){
+        String title = (String) lessonMap.get("title");
+        LocalDate lessonDate = LocalDate.parse((String) lessonMap.get("date"));
+        String content = (String) lessonMap.get("content");
+
+        Lesson lesson = lessonService.updateLesson(lessonId, title, lessonDate, content);
+        return new ResponseEntity<>(lesson, HttpStatus.OK);
+    }
 }
