@@ -22,7 +22,7 @@ public class CourseController {
 
     @PostMapping("")
     public ResponseEntity<Map<String, Boolean>> addCourse(HttpServletRequest request,
-                                                    @RequestBody Map<String, Object> courseMap){
+                                                    @RequestBody Map<String, Object> courseMap) {
         Integer userId = (Integer) request.getAttribute("userId");
         String title = (String) courseMap.get("title");
         String descriptions = (String) courseMap.get("description");
@@ -38,6 +38,19 @@ public class CourseController {
     public ResponseEntity<Course> getCourse(HttpServletRequest request,
                                             @PathVariable("courseId") Integer courseId){
         Course course = courseService.getCourse(courseId);
+        return new ResponseEntity<>(course, HttpStatus.OK);
+    }
+
+    @PutMapping("/{courseId}")
+    public ResponseEntity<Course> updateCourse(HttpServletRequest request,
+                                               @PathVariable("courseId") Integer courseId,
+                                               @RequestBody Map<String, Object> courseMap){
+        Integer userId = (Integer) request.getAttribute("userId");
+        String title = (String) courseMap.get("title");
+        String descriptions = (String) courseMap.get("description");
+        List<Lesson> lessonList = (List<Lesson>) courseMap.get("lessons");
+        Course course = courseService.updateCourse(userId, courseId, title, descriptions, lessonList);
+
         return new ResponseEntity<>(course, HttpStatus.OK);
     }
 }
