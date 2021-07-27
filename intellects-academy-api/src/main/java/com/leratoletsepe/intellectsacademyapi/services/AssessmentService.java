@@ -37,11 +37,15 @@ public class AssessmentService implements IAssessmentService {
 
     @Override
     public Assessment updateAssessment(Integer assessmentId, String title, LocalDate date, Integer courseId) throws IaBadRequestException {
-        return null;
+        Assessment assessment = assessmentRepository.update(assessmentId, title, date, courseId);
+        if(assessment == null)
+            throw new IaBadRequestException("Failed to updated assessment");
+
+        return assessment;
     }
 
     @Override
     public void deleteAssessment(Integer assessmentId) throws IaBadRequestException {
-
+        assessmentRepository.removeById(assessmentId);
     }
 }
