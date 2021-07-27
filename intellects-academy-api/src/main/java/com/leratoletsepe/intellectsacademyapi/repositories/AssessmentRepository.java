@@ -28,6 +28,8 @@ public class AssessmentRepository implements IAssessmentRepository {
     private static final String SQL_UPDATE = "UPDATE IA_ASSESSMENTS SET TITLE = ?, ASSESSMENT_DATE = ?, COURSE_ID = ? " +
             "WHERE ASSESSMENT_ID = ?";
 
+    private static final String SQL_DELETE = "DELETE FROM IA_ASSESSMENTS WHERE ASSESSMENT_ID = ?";
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -70,7 +72,11 @@ public class AssessmentRepository implements IAssessmentRepository {
 
     @Override
     public void removeById(Integer assessmentId) throws IaBadRequestException {
-
+        try {
+            jdbcTemplate.update(SQL_DELETE, new Object[]{ assessmentId });
+        } catch (Exception e){
+            throw new IaNotFoundException("Lesson not found, try again later.");
+        }
     }
 
     private RowMapper<Assessment> assessmentRowMapper = ((rs, rowNumber) -> {
