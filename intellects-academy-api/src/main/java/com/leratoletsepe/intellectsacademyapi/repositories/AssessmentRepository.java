@@ -1,6 +1,8 @@
 package com.leratoletsepe.intellectsacademyapi.repositories;
 
 import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
+import com.leratoletsepe.intellectsacademyapi.exceptions.IaNotFoundException;
+import com.leratoletsepe.intellectsacademyapi.models.Assessment;
 import com.leratoletsepe.intellectsacademyapi.repositories.interfaces.IAssessmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +20,9 @@ public class AssessmentRepository implements IAssessmentRepository {
 
     private static final String SQL_CREATE = "INTO INTO IA_ASSESSMENTS(ASSESSMENT_ID, TITLE, ASSESSMENT_DATE, COURSE_ID) " +
             "VALUES(NEXTVAL('IA_ASSESSMENTS_SEQ'), ?, ?, ?)";
+
+    private static final String SQL_FIND_BY_ID = "SELECT ASSESSMENT_ID, TITLE, ASSESSMENT_DATE, COURSE_ID " +
+            "FROM IA_ASSESSMENTS WHERE ASSESSMENT_ID = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -38,5 +43,14 @@ public class AssessmentRepository implements IAssessmentRepository {
        } catch (Exception e) {
            throw new IaBadRequestException("Failed to create assessment, try again later.");
        }
+    }
+
+    @Override
+    public Assessment findById(String assessmentId) throws IaNotFoundException {
+        try {
+
+        } catch (Exception e) {
+            throw new IaNotFoundException("Assessment not found, try again later");
+        }
     }
 }
