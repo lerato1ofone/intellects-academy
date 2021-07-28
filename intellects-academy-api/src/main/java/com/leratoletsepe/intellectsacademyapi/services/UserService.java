@@ -4,13 +4,14 @@ import com.leratoletsepe.intellectsacademyapi.exceptions.IaBadRequestException;
 import com.leratoletsepe.intellectsacademyapi.models.dto.UserDto;
 import com.leratoletsepe.intellectsacademyapi.models.enums.UserType;
 import com.leratoletsepe.intellectsacademyapi.repositories.UserRepository;
+import com.leratoletsepe.intellectsacademyapi.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
 
 @Service
-public class UserService implements com.leratoletsepe.intellectsacademyapi.services.interfaces.UserService {
+public class UserService implements IUserService {
 
     @Autowired
     UserRepository userRepository;
@@ -42,5 +43,10 @@ public class UserService implements com.leratoletsepe.intellectsacademyapi.servi
             email = email.toLowerCase();
 
         return userRepository.findByEmailAndPassword(email, password);
+    }
+
+    @Override
+    public void deleteAccount(Integer userId) throws IaBadRequestException {
+        userRepository.remove(userId);
     }
 }
