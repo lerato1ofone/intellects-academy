@@ -9,6 +9,7 @@ import com.leratoletsepe.intellectsacademyapi.models.Note;
 import com.leratoletsepe.intellectsacademyapi.models.User;
 import com.leratoletsepe.intellectsacademyapi.models.dto.UserDto;
 import com.leratoletsepe.intellectsacademyapi.models.enums.UserType.UserRole;
+import com.leratoletsepe.intellectsacademyapi.repositories.interfaces.IUserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Repository
-public class UserRepository implements com.leratoletsepe.intellectsacademyapi.repositories.interfaces.UserRepository {
+public class UserRepository implements IUserRepository {
 
     private static final String SQL_CREATE = "INSERT INTO IA_USERS(USER_ID, TITLE, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE) " +
             "VALUES(NEXTVAL('IA_USERS_SEQ'), ?, ?, ?, ?, ?, ?)";
@@ -40,6 +41,10 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
 
     private static final String SQL_UPDATE = "UPDATE IA_USERS SET TITLE = ?, FIRST_NAME = ?, LAST_NAME = ?, EMAIL = ?, ROLE = ?, DOB = ?, OFFICE_NUMBER = ?, AVATAR = ?, NOTES = ?, COURSES = ? " +
             "WHERE USER_ID = ?";
+
+    private static final String SQL_DELETE_USER = "DELETE FROM IA_USERS WHERE USER_ID = ?";
+
+    private static final String SQL_DELETE_USER_NOTES = "DELETE FROM IA_NOTES WHERE USER_ID = ?";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -93,6 +98,16 @@ public class UserRepository implements com.leratoletsepe.intellectsacademyapi.re
 
         } catch ( Exception e){
             throw new IaBadRequestException("Invalid request details. Failed to update profile");
+        }
+    }
+
+    @Override
+    public void remove(Integer userId) throws IaBadRequestException {
+        try {
+            jdbcTemplate.query(SQL_DELETE, new Object[]{ userId }, userDtoRowMapper);
+        }
+        catch (EmptyResultDataAccessException ex) {
+            throw new IaNotFoundException("Failed to delete account, try again later");
         }
     }
 
