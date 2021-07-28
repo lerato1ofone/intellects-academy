@@ -5,11 +5,12 @@ import com.leratoletsepe.intellectsacademyapi.exceptions.IaNotFoundException;
 import com.leratoletsepe.intellectsacademyapi.models.User;
 import com.leratoletsepe.intellectsacademyapi.models.dto.UserProfileDto;
 import com.leratoletsepe.intellectsacademyapi.repositories.UserRepository;
+import com.leratoletsepe.intellectsacademyapi.services.interfaces.IProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProfileService implements com.leratoletsepe.intellectsacademyapi.services.interfaces.ProfileService {
+public class ProfileService implements IProfileService {
 
     @Autowired
     UserRepository userRepository;
